@@ -2,7 +2,18 @@
 // create an object representing the numbers and corresponding letters on a phone
 // create seven letter words from the phone number
   // check if the word is an actual word, using wordsapi.com
-
+const keypad = {
+  0: null,
+  1: null,
+  2: 'ABC',
+  3: 'DEF',
+  4: 'GHI',
+  5: 'JKL',
+  6: 'MNO',
+  7: 'PRS',
+  8: 'TUV',
+  9: 'WXYZ'
+}
 
 function convertNumber(phoneNum) {
   const regLetters = /[a-zA-Z]/g;
