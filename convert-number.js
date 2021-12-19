@@ -15,24 +15,33 @@ const keypad = {
   '9': 'WXYZ'
 }
 
-function convertNumber(phoneNum) {
+function validateNumber(phoneNum) {
   const regLetters = /[a-zA-Z]/g;
-  const parsedNum = phoneNum.replace(/[' ']/g, '').replace(/[-]/g,'');
-  if (parsedNum.length !== 10 || regLetters.test(parsedNum)) {
+  const parsedNum = phoneNum.replace(/[' ']/g, '').replace(/[-]/g, '');
+  let num;
+
+  if ((parsedNum.length !== 10 && parsedNum.length !== 7) || regLetters.test(parsedNum)) {
     console.error('invalid number');
+    return;
   }
-  const num = parsedNum.slice(3);
+
+  parsedNum.length === 10 ? num = parsedNum.slice(3) : num = parsedNum.slice();
+  return num;
+}
+
+// console.log(validateNumber('234-4426'));
+
+function convertNumber(phoneNum) {
+  const number = validateNumber(phoneNum);
 
   const allWords = [];
-  const firstLetterOptions = keypad[num[0]];
-  const secondLetterOptions = keypad[num[1]];
-  const thirdLetterOptions = keypad[num[2]];
-  const fourthLetterOptions = keypad[num[3]];
-  const fifthLetterOptions = keypad[num[4]];
-  const sixthLetterOptions = keypad[num[5]];
-  const seventhLetterOptions = keypad[num[6]];
-
-
+  const firstLetterOptions = keypad[number[0]];
+  const secondLetterOptions = keypad[number[1]];
+  const thirdLetterOptions = keypad[number[2]];
+  const fourthLetterOptions = keypad[number[3]];
+  const fifthLetterOptions = keypad[number[4]];
+  const sixthLetterOptions = keypad[number[5]];
+  const seventhLetterOptions = keypad[number[6]];
 
   for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
     for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
@@ -55,24 +64,3 @@ function convertNumber(phoneNum) {
 }
 
 convertNumber('808-234-4426');
-
-//
-
-
-// Recursion
-// function getAllWords(phoneNum, curr, output) {
-//   if (curr === 3) {
-//     console.log('output', output);
-//     return;
-//   }
-//   let digit = phoneNum[0];
-//   for (let i = 0; i < phoneNum[digit].length; i++) {
-//     output.push(keypad[digit][curr]);
-//   }
-//   return keypad[digit][curr] + getAllWords(phoneNum, curr + 1);
-//   console.log('currword', currWord)
-
-
-// }
-
-// getAllWords('4', 0);
