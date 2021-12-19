@@ -2,17 +2,21 @@
 // create an object representing the numbers and corresponding letters on a phone
 // create seven letter words from the phone number
   // check if the word is an actual word, using wordsapi.com
+// import fetch from "node-fetch";
+// import words from 'an-array-of-english-words';
+const words = require('an-array-of-english-words');
+
 const keypad = {
   '0': null,
   '1': null,
-  '2': 'ABC',
-  '3': 'DEF',
-  '4': 'GHI',
-  '5': 'JKL',
-  '6': 'MNO',
-  '7': 'PQRS',
-  '8': 'TUV',
-  '9': 'WXYZ'
+  '2': 'abc',
+  '3': 'def',
+  '4': 'ghi',
+  '5': 'jkl',
+  '6': 'mno',
+  '7': 'pqrs',
+  '8': 'tuv',
+  '9': 'wxyz'
 }
 
 function validateNumber(phoneNum) {
@@ -29,8 +33,6 @@ function validateNumber(phoneNum) {
   return num;
 }
 
-// console.log(validateNumber('234-4426'));
-
 function convertNumber(phoneNum) {
   const number = validateNumber(phoneNum);
 
@@ -43,6 +45,33 @@ function convertNumber(phoneNum) {
   const sixthLetterOptions = keypad[number[5]];
   const seventhLetterOptions = keypad[number[6]];
 
+    //testing with last four digits
+
+  // for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
+  //   for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
+  //     for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
+  //       for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
+  //         const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex] + fourthLetterOptions[fourthIndex];
+  //         all.push(currWord);
+  //         if (allWords.length >= 4) {
+  //           console.log('all words', allWords);
+  //           return;
+  //           // return allWords;
+  //         }
+  //         if (checkWord(currWord)) {
+  //           console.log('word added');
+  //           allWords.push(currWord);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  // if (allWords.length === 0) {
+  //   console.log('no words from these letters');
+  // }
+
+
+  // test with all digits
   for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
     for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
       for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
@@ -52,7 +81,14 @@ function convertNumber(phoneNum) {
               for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
                 const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex]
                 + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
-                allWords.push(currWord);
+                if (allWords.length >= 5) {
+                  console.log('all words', allWords);
+                  return;
+                }
+
+                if (checkWord(currWord)) {
+                  allWords.push(currWord);
+                }
               }
             }
           }
@@ -60,7 +96,17 @@ function convertNumber(phoneNum) {
       }
     }
   }
+  if (allWords.length < 5) {
+    console.log('these are all the matches');
+  }
   console.log('all words', allWords)
 }
 
-convertNumber('808-234-4426');
+function checkWord(word) {
+  if (words.includes(word)) {
+    return true;
+  }
+  return false;
+}
+
+convertNumber('2845337');

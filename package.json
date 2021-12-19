@@ -1,0 +1,29 @@
+{
+  "name": "vanity-numbers",
+  "version": "1.0.0",
+  "description": "Converts a phone number into possible vanity numbers",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch --mode=development --stats=minimal"
+  },
+  "dependencies": {
+    "an-array-of-english-words": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-html": "^6.1.2",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
+    "nodemon": "^2.0.14",
+    "npm-run-all": "^4.1.5",
+    "stylelint": "^14.0.1",
+    "stylelint-config-recommended": "^6.0.0",
+    "stylelint-config-standard": "^23.0.0",
+    "webpack": "^5.61.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
+  }
+}
