@@ -36,7 +36,7 @@ function validateNumber(phoneNum) {
 function convertNumber(phoneNum) {
   const number = validateNumber(phoneNum);
 
-  const allWords = [];
+  const vanityOptions = [];
   const firstLetterOptions = keypad[number[0]];
   const secondLetterOptions = keypad[number[1]];
   const thirdLetterOptions = keypad[number[2]];
@@ -45,33 +45,7 @@ function convertNumber(phoneNum) {
   const sixthLetterOptions = keypad[number[5]];
   const seventhLetterOptions = keypad[number[6]];
 
-    //testing with last four digits
-
-  // for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
-  //   for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
-  //     for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
-  //       for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
-  //         const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex] + fourthLetterOptions[fourthIndex];
-  //         all.push(currWord);
-  //         if (allWords.length >= 4) {
-  //           console.log('all words', allWords);
-  //           return;
-  //           // return allWords;
-  //         }
-  //         if (checkWord(currWord)) {
-  //           console.log('word added');
-  //           allWords.push(currWord);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // if (allWords.length === 0) {
-  //   console.log('no words from these letters');
-  // }
-
-
-  // test with all digits
+  // Get 7 letter words from a phone number
   for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
     for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
       for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
@@ -80,14 +54,13 @@ function convertNumber(phoneNum) {
             for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
               for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
                 const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex]
-                + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
-                if (allWords.length >= 5) {
-                  console.log('all words', allWords);
+                  + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
+                if (vanityOptions.length >= 5) {
+                  console.log('vanity options', vanityOptions);
                   return;
                 }
-
                 if (checkWord(currWord)) {
-                  allWords.push(currWord);
+                  vanityOptions.push(currWord);
                 }
               }
             }
@@ -96,10 +69,43 @@ function convertNumber(phoneNum) {
       }
     }
   }
-  if (allWords.length < 5) {
+  const firstThreeToWords = [];
+  const lastFourToWords = [];
+
+  // If there are less than 5 vanityOptions, get 3 letter words and 4 letter words
+  if (vanityOptions.length < 5) {
+    for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
+      for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
+        for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
+          const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex];
+          // Check if the three letter combination is a word, and only add the three letter word if the number of options is less than the remaining options needed for vanityOptions
+          if (checkWord(currWord) && firstThreeToWords.length < 5 - vanityOptions.length) {
+            firstThreeToWords.push(currWord);
+          }
+        }
+      }
+    }
+    for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
+      for (let fifthIndex = 0; fifthIndex < fifthLetterOptions.length; fifthIndex++) {
+        for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
+          for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
+            const currWord = fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
+            if (checkWord(currWord) && lastFourToWords.length < 5 - vanityOptions.length) {
+              lastFourToWords.push(currWord);
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  if (vanityOptions.length < 5) {
     console.log('these are all the matches');
   }
-  console.log('all words', allWords)
+  console.log('all words', vanityOptions);
+  console.log('three letters words', firstThreeToWords);
+  console.log('four letter words', lastFourToWords)
 }
 
 function checkWord(word) {
