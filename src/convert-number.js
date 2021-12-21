@@ -1,9 +1,3 @@
-// create a function to convert a phone number to vanity number options
-// create an object representing the numbers and corresponding letters on a phone
-// create seven letter words from the phone number
-  // check if the word is an actual word, using wordsapi.com
-// import fetch from "node-fetch";
-// import words from 'an-array-of-english-words';
 const words = require('an-array-of-english-words');
 
 const keypad = {
@@ -26,16 +20,24 @@ function validateNumber(phoneNum) {
 
   if ((parsedNum.length !== 10 && parsedNum.length !== 7) || regLetters.test(parsedNum)) {
     console.error('invalid number');
-    return;
+    return false;
   }
 
   parsedNum.length === 10 ? num = parsedNum.slice(3) : num = parsedNum.slice();
+
+  if (num.includes('0') || num.includes('1')) {
+    console.error('invalid number, cannot include 0 or 1');
+    return false;
+  }
+
   return num;
 }
 
 function convertNumber(phoneNum) {
   const number = validateNumber(phoneNum);
-
+  if (!number) {
+    return;
+  }
   const vanityOptions = [];
   const firstLetterOptions = keypad[number[0]];
   const secondLetterOptions = keypad[number[1]];
@@ -78,7 +80,7 @@ function convertNumber(phoneNum) {
       for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
         for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
           const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex];
-          // Check if the three letter combination is a word, and only add the three letter word if the number of options is less than the remaining options needed for vanityOptions
+          // Checks if the three letter combination is a word, and only adds the three letter word if the number of options is less than the remaining options needed for vanityOptions
           if (checkWord(currWord) && firstThreeToWords.length < 5 - vanityOptions.length) {
             firstThreeToWords.push(currWord);
           }
@@ -99,13 +101,17 @@ function convertNumber(phoneNum) {
     }
   }
 
+  for (let i = 0; i < lastFourToWords.length; i++) {
+    vanityOptions.push(`${firstThreeToWords[0]}-${lastFourToWords[i]}`);
+    if (vanityOptions.length >= 5) {
+      console.log('vanity options', vanityOptions);
+      return;
+    }
+  }
 
   if (vanityOptions.length < 5) {
-    console.log('these are all the matches');
+    console.log('these are all the matches', vanityOptions);
   }
-  console.log('all words', vanityOptions);
-  console.log('three letters words', firstThreeToWords);
-  console.log('four letter words', lastFourToWords)
 }
 
 function checkWord(word) {
@@ -115,4 +121,4 @@ function checkWord(word) {
   return false;
 }
 
-convertNumber('2845337');
+convertNumber('2344436');
