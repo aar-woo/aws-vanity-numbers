@@ -47,7 +47,7 @@ function convertNumber(phoneNum) {
   const sixthLetterOptions = keypad[number[5]];
   const seventhLetterOptions = keypad[number[6]];
 
-  // Get 7 letter words from a phone number
+  // Get up to five 7 letter words from phone number
   for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
     for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
       for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
@@ -58,7 +58,7 @@ function convertNumber(phoneNum) {
                 const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex]
                   + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
                 if (vanityOptions.length >= 5) {
-                  console.log('vanity options', vanityOptions);
+                  console.log('Vanity options: ', vanityOptions);
                   return;
                 }
                 if (checkWord(currWord)) {
@@ -74,13 +74,13 @@ function convertNumber(phoneNum) {
   const firstThreeToWords = [];
   const lastFourToWords = [];
 
-  // If there are less than 5 vanityOptions, get 3 letter words and 4 letter words
+  // If there are less than five vanityOptions, get 3 letter words and 4 letter words
   if (vanityOptions.length < 5) {
     for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
       for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
         for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
           const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex];
-          // Checks if the three letter combination is a word, and only adds the three letter word if the number of options is less than the remaining options needed for vanityOptions
+          // Check if the 3 letter combination is a word, and only add the word if the number of options is less than the remaining options needed to have five vanity options
           if (checkWord(currWord) && firstThreeToWords.length < 5 - vanityOptions.length) {
             firstThreeToWords.push(currWord);
           }
@@ -92,6 +92,7 @@ function convertNumber(phoneNum) {
         for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
           for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
             const currWord = fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
+            // Check if the 4 letter combination is a word, and only add the word if the number of options is less than the remaining options needed to have five vanity options
             if (checkWord(currWord) && lastFourToWords.length < 5 - vanityOptions.length) {
               lastFourToWords.push(currWord);
             }
@@ -99,18 +100,19 @@ function convertNumber(phoneNum) {
         }
       }
     }
-  }
 
-  for (let i = 0; i < lastFourToWords.length; i++) {
-    vanityOptions.push(`${firstThreeToWords[0]}-${lastFourToWords[i]}`);
-    if (vanityOptions.length >= 5) {
-      console.log('vanity options', vanityOptions);
-      return;
+    // Create combinations of 3 letter and 4 letter words and add them to the vanity options
+    for (let i = 0; i < lastFourToWords.length; i++) {
+      vanityOptions.push(`${firstThreeToWords[0]}-${lastFourToWords[i]}`);
+      if (vanityOptions.length >= 5) {
+        console.log('Vanity options: ', vanityOptions);
+        return;
+      }
     }
   }
 
   if (vanityOptions.length < 5) {
-    console.log('these are all the matches', vanityOptions);
+    console.log(`Only ${vanityOptions.length} vanity options were found for this phone number.`, vanityOptions);
   }
 }
 
@@ -121,4 +123,4 @@ function checkWord(word) {
   return false;
 }
 
-convertNumber('2344436');
+convertNumber('3588339');
