@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
 const convertNumber = require('./convert-number');
+const insertVanityNumbers = require('./insert-vanity-numbers');
 
-convertNumber('8082324826');
+insertVanityNumbers('800-356-9377')

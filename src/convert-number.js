@@ -13,6 +13,13 @@ const keypad = {
   '9': 'wxyz'
 }
 
+function checkWord(word) {
+  if (words.includes(word)) {
+    return true;
+  }
+  return false;
+}
+
 function validateNumber(phoneNum) {
   const regLetters = /[a-zA-Z]/g;
   const parsedNum = phoneNum.replace(/[' ']/g, '').replace(/[-]/g, '');
@@ -59,7 +66,7 @@ function convertNumber(phoneNum) {
                   + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
                 if (vanityOptions.length >= 5) {
                   console.log('Vanity options: ', vanityOptions);
-                  return;
+                  return vanityOptions;
                 }
                 if (checkWord(currWord)) {
                   vanityOptions.push(currWord.toUpperCase());
@@ -112,25 +119,15 @@ function convertNumber(phoneNum) {
       }
       if (vanityOptions.length >= 5) {
         console.log('Vanity options: ', vanityOptions);
-        return;
+        return vanityOptions;
       }
     }
   }
 
   if (vanityOptions.length < 5) {
     console.log(`Only ${vanityOptions.length} vanity options were found for this phone number.`, vanityOptions);
-    console.log('three ltter options', firstThreeToWords);
-    console.log('last four', lastFourToWords);
+    return vanityOptions;
   }
 }
-
-function checkWord(word) {
-  if (words.includes(word)) {
-    return true;
-  }
-  return false;
-}
-
-// convertNumber('3588339');
 
 module.exports = convertNumber;
