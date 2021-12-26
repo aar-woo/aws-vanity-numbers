@@ -8,7 +8,6 @@ AWS.config.update({
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-// convertNumber('800-356-9377');
 function insertVanityNumbers(phoneNum) {
   const table = "VanityNumbers";
 
