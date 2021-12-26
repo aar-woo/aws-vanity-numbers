@@ -13,6 +13,13 @@ const keypad = {
   '9': 'wxyz'
 }
 
+function checkWord(word) {
+  if (words.includes(word)) {
+    return true;
+  }
+  return false;
+}
+
 function validateNumber(phoneNum) {
   const regLetters = /[a-zA-Z]/g;
   const parsedNum = phoneNum.replace(/[' ']/g, '').replace(/[-]/g, '');
@@ -59,10 +66,10 @@ function convertNumber(phoneNum) {
                   + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
                 if (vanityOptions.length >= 5) {
                   console.log('Vanity options: ', vanityOptions);
-                  return;
+                  return vanityOptions;
                 }
                 if (checkWord(currWord)) {
-                  vanityOptions.push(currWord);
+                  vanityOptions.push(currWord.toUpperCase());
                 }
               }
             }
@@ -103,24 +110,24 @@ function convertNumber(phoneNum) {
 
     // Create combinations of 3 letter and 4 letter words and add them to the vanity options
     for (let i = 0; i < lastFourToWords.length; i++) {
-      vanityOptions.push(`${firstThreeToWords[0]}-${lastFourToWords[i]}`);
+      // If there are no 3 letter word options, create vanity options from just 4 letter word options
+      if (firstThreeToWords.length === 0) {
+        vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[i]}`.toUpperCase());
+      } else {
+        // Create vanity options from the first 3 letter word and every 4 letter word
+        vanityOptions.push(`${firstThreeToWords[0]}-${lastFourToWords[i]}`.toUpperCase());
+      }
       if (vanityOptions.length >= 5) {
         console.log('Vanity options: ', vanityOptions);
-        return;
+        return vanityOptions;
       }
     }
   }
 
   if (vanityOptions.length < 5) {
     console.log(`Only ${vanityOptions.length} vanity options were found for this phone number.`, vanityOptions);
+    return vanityOptions;
   }
 }
 
-function checkWord(word) {
-  if (words.includes(word)) {
-    return true;
-  }
-  return false;
-}
-
-convertNumber('3588339');
+module.exports = convertNumber;
