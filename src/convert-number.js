@@ -22,7 +22,8 @@ function checkWord(word) {
 
 function validateNumber(phoneNum) {
   const regLetters = /[a-zA-Z]/g;
-  const parsedNum = phoneNum.replace(/[' ']/g, '').replace(/[-]/g, '');
+  // Parses the initial country calling code and removes all spaces and dashes
+  const parsedNum = phoneNum.slice(2).replace(/[' ']/g, '').replace(/[-]/g, '');
   let num;
 
   if ((parsedNum.length !== 10 && parsedNum.length !== 7) || regLetters.test(parsedNum)) {
@@ -40,7 +41,7 @@ function validateNumber(phoneNum) {
   return num;
 }
 
-function convertNumber(phoneNum) {
+async function convertNumber(phoneNum) {
   const number = validateNumber(phoneNum);
   if (!number) {
     return;
@@ -54,71 +55,56 @@ function convertNumber(phoneNum) {
   const sixthLetterOptions = keypad[number[5]];
   const seventhLetterOptions = keypad[number[6]];
 
-  // Get up to five 7 letter words from phone number
+  const firstThreeToWords = [];
+  const lastFourToWords = [];
+
+// Get three letter words from the first three digits, and four letter words from the last four digits
   for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
     for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
       for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
-        for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
-          for (let fifthIndex = 0; fifthIndex < fifthLetterOptions.length; fifthIndex++) {
-            for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
-              for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
-                const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex]
-                  + fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
-                if (vanityOptions.length >= 5) {
-                  console.log('Vanity options: ', vanityOptions);
-                  return vanityOptions;
-                }
-                if (checkWord(currWord)) {
-                  vanityOptions.push(currWord.toUpperCase());
-                }
-              }
-            }
+        const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex];
+        if (checkWord(currWord)) {
+          firstThreeToWords.push(currWord);
+        }
+      }
+    }
+  }
+  for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
+    for (let fifthIndex = 0; fifthIndex < fifthLetterOptions.length; fifthIndex++) {
+      for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
+        for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
+          const currWord = fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
+          if (checkWord(currWord)) {
+            lastFourToWords.push(currWord);
           }
         }
       }
     }
   }
-  const firstThreeToWords = [];
-  const lastFourToWords = [];
 
-  // If there are less than five vanityOptions, get 3 letter words and 4 letter words
-  if (vanityOptions.length < 5) {
-    for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
-      for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
-        for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
-          const currWord = firstLetterOptions[firstIndex] + secondLetterOptions[secondIndex] + thirdLetterOptions[thirdIndex];
-          // Check if the 3 letter combination is a word, and only add the word if the number of options is less than the remaining options needed to have five vanity options
-          if (checkWord(currWord) && firstThreeToWords.length < 5 - vanityOptions.length) {
-            firstThreeToWords.push(currWord);
-          }
-        }
-      }
-    }
-    for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
-      for (let fifthIndex = 0; fifthIndex < fifthLetterOptions.length; fifthIndex++) {
-        for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
-          for (let seventhIndex = 0; seventhIndex < seventhLetterOptions.length; seventhIndex++) {
-            const currWord = fourthLetterOptions[fourthIndex] + fifthLetterOptions[fifthIndex] + sixthLetterOptions[sixthIndex] + seventhLetterOptions[seventhIndex];
-            // Check if the 4 letter combination is a word, and only add the word if the number of options is less than the remaining options needed to have five vanity options
-            if (checkWord(currWord) && lastFourToWords.length < 5 - vanityOptions.length) {
-              lastFourToWords.push(currWord);
-            }
-          }
-        }
-      }
-    }
-
-    // Create combinations of 3 letter and 4 letter words and add them to the vanity options
+  // Create combinations of three letter and four letter words and add them to the vanity options
+  // If there are no three letter word options, create vanity options from just four letter word options
+  if (firstThreeToWords.length === 0) {
     for (let i = 0; i < lastFourToWords.length; i++) {
-      // If there are no 3 letter word options, create vanity options from just 4 letter word options
-      if (firstThreeToWords.length === 0) {
-        vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[i]}`.toUpperCase());
-      } else {
-        // Create vanity options from the first 3 letter word and every 4 letter word
-        vanityOptions.push(`${firstThreeToWords[0]}-${lastFourToWords[i]}`.toUpperCase());
-      }
+      vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[i]}`.toUpperCase());
       if (vanityOptions.length >= 5) {
-        console.log('Vanity options: ', vanityOptions);
+        return vanityOptions;
+      }
+    }
+  } else {
+    // For every three letter word option, add a four letter word option to create a vanity option
+    for (let i = 0; i < firstThreeToWords.length; i++) {
+      for (let j = 0; j < lastFourToWords.length; j++) {
+        vanityOptions.push((firstThreeToWords[i] + lastFourToWords[j]).toUpperCase());
+        if (vanityOptions.length >= 5) {
+          return vanityOptions;
+        }
+      }
+    }
+    // If there are not yet five vanity options, add vanity options made of the first three digits and four letter word options
+    for (let k = 0; k < lastFourToWords.length; k++) {
+      vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[k]}`.toUpperCase());
+      if (vanityOptions.length >= 5) {
         return vanityOptions;
       }
     }
@@ -129,5 +115,7 @@ function convertNumber(phoneNum) {
     return vanityOptions;
   }
 }
+
+convertNumber('+1-800-356-9377')
 
 module.exports = convertNumber;
