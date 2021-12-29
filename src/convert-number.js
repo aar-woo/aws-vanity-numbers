@@ -111,11 +111,11 @@ async function convertNumber(phoneNum) {
   }
 
   if (vanityOptions.length < 5) {
-    console.log(`Only ${vanityOptions.length} vanity options were found for this phone number.`, vanityOptions);
+    // console.log(`Only ${vanityOptions.length} vanity options were found for this phone number.`, vanityOptions);
     return vanityOptions;
   }
 }
 
-convertNumber('+1-800-356-9377')
+// convertNumber('+1-800-356-9377')
 
 module.exports = convertNumber;

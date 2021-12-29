@@ -10,6 +10,7 @@ exports.handler = async function(event, context) {
       PhoneNumber: phoneNum,
       VanityNumbers: vanityNumbers
     }
+    await insertVanityNumbers(vanityNumbers);
     return response;
   }
   catch (err) {
@@ -19,11 +20,19 @@ exports.handler = async function(event, context) {
 }
 
 // function handle(phoneNum) {
-//   const response = {
-//     PhoneNumber: phoneNum,
-//     VanityNumbers: convertNumber(phoneNum)
+//   try {
+//     const vanityNumbers = convertNumber(phoneNum);
+//     const response = {
+//       PhoneNumber: phoneNum,
+//       VanityNumbers: vanityNumbers
+//     }
+//     // await insertVanityNumbers(phoneNum, vanityNumbers);
+//     return response;
 //   }
-//   return response;
+//   catch (err) {
+//     console.error(err);
+//     return;
+//   }
 // }
 
 // console.log(handle('+1-800-356-9377'));

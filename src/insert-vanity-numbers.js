@@ -8,10 +8,8 @@ AWS.config.update({
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-function insertVanityNumbers(phoneNum) {
+async function insertVanityNumbers(phoneNum, vanityOptions) {
   const table = "VanityNumbers";
-
-  const vanityOptions = convertNumber(phoneNum);
 
   const params = {
     TableName: table,
@@ -30,5 +28,6 @@ function insertVanityNumbers(phoneNum) {
     }
   });
 }
+
 
 module.exports = insertVanityNumbers;
