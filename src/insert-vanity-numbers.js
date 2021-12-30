@@ -2,15 +2,15 @@ const AWS = require('aws-sdk');
 const convertNumber = require('./convert-number');
 
 AWS.config.update({
-  region: "us-west-1",
-  endpoint: "http://localhost:8000"
+  region: "us-west-2"
+  // region: "us-west-1",
+  // endpoint: "http://localhost:8000"
 });
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 async function insertVanityNumbers(phoneNum, vanityOptions) {
   const table = "VanityNumbers";
-
   const params = {
     TableName: table,
     Item: {
@@ -20,14 +20,7 @@ async function insertVanityNumbers(phoneNum, vanityOptions) {
   };
 
   console.log("Adding a new item...");
-  docClient.put(params, function (err, data) {
-    if (err) {
-      console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
-    } else {
-      console.log("Added item:", JSON.stringify(data, null, 2));
-    }
-  });
+  docClient.put(params).promise();
 }
-
 
 module.exports = insertVanityNumbers;

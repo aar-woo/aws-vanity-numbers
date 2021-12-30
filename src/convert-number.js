@@ -116,6 +116,6 @@ async function convertNumber(phoneNum) {
   }
 }
 
-// convertNumber('+1-800-356-9377')
+// console.log(convertNumber('+1-800-463-3339'));
 
 module.exports = convertNumber;
