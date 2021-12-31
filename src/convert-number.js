@@ -111,11 +111,9 @@ async function convertNumber(phoneNum) {
   }
 
   if (vanityOptions.length < 5) {
-    // console.log(`Only ${vanityOptions.length} vanity options were found for this phone number.`, vanityOptions);
     return vanityOptions;
   }
 }
 
-// console.log(convertNumber('+1-800-463-3339'));
 
 module.exports = convertNumber;

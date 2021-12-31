@@ -1,10 +1,12 @@
 const AWS = require('aws-sdk');
 const convertNumber = require('./convert-number');
 
-AWS.config.update({
-  region: "us-west-2"
+// for local DYNAMODB testing use:
   // region: "us-west-1",
   // endpoint: "http://localhost:8000"
+
+AWS.config.update({
+  region: "us-west-2"
 });
 
 const docClient = new AWS.DynamoDB.DocumentClient();
