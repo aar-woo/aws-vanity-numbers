@@ -21,27 +21,26 @@ function checkWord(word) {
 }
 
 function validateNumber(phoneNum) {
-  const regLetters = /[a-zA-Z]/g;
   // Parses the initial country calling code and removes all spaces and dashes
   const parsedNum = phoneNum.slice(2).replace(/[' ']/g, '').replace(/[-]/g, '');
-  let num;
+  let validatedNum;
 
-  if ((parsedNum.length !== 10 && parsedNum.length !== 7) || regLetters.test(parsedNum)) {
+  if ((parsedNum.length !== 10 && parsedNum.length !== 7)) {
     console.error('invalid number');
     return false;
   }
 
-  parsedNum.length === 10 ? num = parsedNum.slice(3) : num = parsedNum.slice();
+  parsedNum.length === 10 ? validatedNum = parsedNum.slice(3) : validatedNum = parsedNum.slice();
 
-  if (num.includes('0') || num.includes('1')) {
+  if (validatedNum.includes('0') || validatedNum.includes('1')) {
     console.error('invalid number, cannot include 0 or 1');
     return false;
   }
 
-  return num;
+  return validatedNum;
 }
 
-async function convertNumber(phoneNum) {
+function convertNumber(phoneNum) {
   const number = validateNumber(phoneNum);
   if (!number) {
     return;

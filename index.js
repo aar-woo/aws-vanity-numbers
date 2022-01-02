@@ -6,7 +6,7 @@ const insertVanityNumbers = require('./src/insert-vanity-numbers');
 exports.handler = async function(event, context, callback) {
   const phoneNum = event['Details']['ContactData']['CustomerEndpoint']['Address'];
   const initialContactId = event['Details']['ContactData']['InitialContactId'] // for updating contact attributes with vanity options
-  const vanityNumbers = await convertNumber(phoneNum);
+  const vanityNumbers = convertNumber(phoneNum);
 
   // await setContactVanities(vanityNumbers, initialContactId);
 
