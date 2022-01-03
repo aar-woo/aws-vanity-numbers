@@ -10,7 +10,7 @@ const dynamodb = new AWS.DynamoDB();
 var params = {
   TableName: "VanityNumbers",
   KeySchema: [
-    { AttributeName: "phoneNumber", KeyType: "HASH" }  //Partition key
+    { AttributeName: "phoneNumber", KeyType: "HASH" }
   ],
   AttributeDefinitions: [
     { AttributeName: "phoneNumber", AttributeType: "S" }

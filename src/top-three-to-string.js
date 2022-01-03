@@ -1,6 +1,11 @@
 const AWS = require('aws-sdk');
 const connect = new AWS.Connect();
 
+/**
+ * Function that concatenates the first three vanity numbers in an array
+ * @param {Array} vanityOptions - An array of strings, each a vanity number
+ * @returns {String} topThreeVanities - The concatenated string of first three vanity numbers
+ */
 function topThreeToString (vanityOptions) {
   let topThreeVanities = '';
   let numOptions;

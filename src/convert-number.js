@@ -1,8 +1,6 @@
 const words = require('an-array-of-english-words');
 
 const keypad = {
-  '0': null,
-  '1': null,
   '2': 'abc',
   '3': 'def',
   '4': 'ghi',
@@ -13,6 +11,11 @@ const keypad = {
   '9': 'wxyz'
 }
 
+/**
+ * Function that checks if a combination of letters form an actual checking against an-array-of-english-words npm package
+ * @param {String} word - A combination of letters from converting a phone number's digits to letters
+ * @returns {Boolean} - If the param word exists in an-array-of-english-words
+ */
 function checkWord(word) {
   if (words.includes(word)) {
     return true;
@@ -20,37 +23,41 @@ function checkWord(word) {
   return false;
 }
 
+/**
+ * Function that gets the country and area code from a phone number
+ * @param {String} phoneNum - A caller's phone number
+ * @returns {String} code - The country and area code of the phone number
+ */
 function getCountryAreaCodes(phoneNum) {
   const code = `${phoneNum[1]}-${phoneNum.slice(2, 5)}`;
   return code;
 }
 
-function validateNumber(phoneNum) {
-  // Parses the initial country calling code and removes all spaces and dashes
-  const parsedNum = phoneNum.slice(2).replace(/[' ']/g, '').replace(/[-]/g, '');
-  let validatedNum;
+/**
+ * Function that removes the phone number's country and area codes and spaces and dashes
+ * @param {String} phoneNum - A caller's phone number
+ * @returns {String} parsedNum - Seven digit phone number
+ */
+function parseNumber(phoneNum) {
+  let parsedNum = phoneNum.slice(5).replace(/[' ']/g, '').replace(/[-]/g, '');
 
-  if ((parsedNum.length !== 10 && parsedNum.length !== 7)) {
-    console.error('invalid number');
-    return false;
-  }
-
-  parsedNum.length === 10 ? validatedNum = parsedNum.slice(3) : validatedNum = parsedNum.slice();
-
-  if (validatedNum.includes('0') || validatedNum.includes('1')) {
+  if (parsedNum.includes('0') || parsedNum.includes('1')) {
     console.error('invalid number, cannot include 0 or 1');
     return false;
   }
 
-  return validatedNum;
+  return parsedNum;
 }
 
+/**
+ * Function that creates combinations of corresponding letters on a keypad from a phone number,
+ * calls @function checkWord and adds the word to the vanity options with a max of five options
+ * @param {String} phoneNum - A caller's sevend digit phone number
+ * @returns {Array} vanityOptions - An array of strings, each a vanity number
+ */
 function convertNumber(phoneNum) {
-  const number = validateNumber(phoneNum);
+  const number = parseNumber(phoneNum);
   const countryAreaCode = getCountryAreaCodes(phoneNum);
-  if (!number) {
-    return;
-  }
   const vanityOptions = [];
   const firstLetterOptions = keypad[number[0]];
   const secondLetterOptions = keypad[number[1]];
@@ -62,7 +69,7 @@ function convertNumber(phoneNum) {
   const firstThreeToWords = [];
   const lastFourToWords = [];
 
-// Get three letter words from the first three digits, and four letter words from the last four digits
+  // Get three letter words from the first three digits and store them in an array
   for (let firstIndex = 0; firstIndex < firstLetterOptions.length; firstIndex++) {
     for (let secondIndex = 0; secondIndex < secondLetterOptions.length; secondIndex++) {
       for (let thirdIndex = 0; thirdIndex < thirdLetterOptions.length; thirdIndex++) {
@@ -73,6 +80,7 @@ function convertNumber(phoneNum) {
       }
     }
   }
+  // Get four letter words from the last four digits and store them in an array
   for (let fourthIndex = 0; fourthIndex < fourthLetterOptions.length; fourthIndex++) {
     for (let fifthIndex = 0; fifthIndex < fifthLetterOptions.length; fifthIndex++) {
       for (let sixthIndex = 0; sixthIndex < sixthLetterOptions.length; sixthIndex++) {
@@ -85,8 +93,6 @@ function convertNumber(phoneNum) {
       }
     }
   }
-
-  // Create combinations of three letter and four letter words and add them to vanity options
   // If there are no three letter word options, create vanity options from just four letter word options
   if (firstThreeToWords.length === 0) {
     for (let i = 0; i < lastFourToWords.length; i++) {
@@ -96,7 +102,7 @@ function convertNumber(phoneNum) {
       }
     }
   } else {
-    // For every three letter word option, add a four letter word option to create a vanity option
+    // Create combinations of three letter and four letter words and add them to vanity options, example: ('TOY-SPUR')
     for (let i = 0; i < firstThreeToWords.length; i++) {
       for (let j = 0; j < lastFourToWords.length; j++) {
         vanityOptions.push((`${countryAreaCode}-${firstThreeToWords[i]}-${lastFourToWords[j]}`).toUpperCase());
@@ -105,7 +111,8 @@ function convertNumber(phoneNum) {
         }
       }
     }
-    // If there are not yet five vanity options, add vanity options made of the first three digits of the phone number combined with four letter word options
+    // If there are not yet five vanity options, add vanity options made of the first three digits of the phone number
+    // combined with four letter word options, example: ('223-BALL')
     for (let k = 0; k < lastFourToWords.length; k++) {
       vanityOptions.push(`${countryAreaCode}-${number[0]}${number[1]}${number[2]}-${lastFourToWords[k]}`.toUpperCase());
       if (vanityOptions.length >= 5) {
@@ -113,12 +120,9 @@ function convertNumber(phoneNum) {
       }
     }
   }
-
-  if (vanityOptions.length < 5) {
-    return vanityOptions;
-  }
+  return vanityOptions;
 }
 
-console.log(convertNumber("+18587226925"))
-
 module.exports = convertNumber;
+
+console.log(convertNumber('+18587226925'));
