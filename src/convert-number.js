@@ -124,5 +124,3 @@ function convertNumber(phoneNum) {
 }
 
 module.exports = convertNumber;
-
-console.log(convertNumber('+18587226925'));
