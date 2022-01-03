@@ -20,6 +20,11 @@ function checkWord(word) {
   return false;
 }
 
+function getCountryAreaCodes(phoneNum) {
+  const code = `${phoneNum[1]}-${phoneNum.slice(2, 5)}`;
+  return code;
+}
+
 function validateNumber(phoneNum) {
   // Parses the initial country calling code and removes all spaces and dashes
   const parsedNum = phoneNum.slice(2).replace(/[' ']/g, '').replace(/[-]/g, '');
@@ -42,6 +47,7 @@ function validateNumber(phoneNum) {
 
 function convertNumber(phoneNum) {
   const number = validateNumber(phoneNum);
+  const countryAreaCode = getCountryAreaCodes(phoneNum);
   if (!number) {
     return;
   }
@@ -84,7 +90,7 @@ function convertNumber(phoneNum) {
   // If there are no three letter word options, create vanity options from just four letter word options
   if (firstThreeToWords.length === 0) {
     for (let i = 0; i < lastFourToWords.length; i++) {
-      vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[i]}`.toUpperCase());
+      vanityOptions.push(`${countryAreaCode}-${number[0]}${number[1]}${number[2]}-${lastFourToWords[i]}`.toUpperCase());
       if (vanityOptions.length >= 5) {
         return vanityOptions;
       }
@@ -93,7 +99,7 @@ function convertNumber(phoneNum) {
     // For every three letter word option, add a four letter word option to create a vanity option
     for (let i = 0; i < firstThreeToWords.length; i++) {
       for (let j = 0; j < lastFourToWords.length; j++) {
-        vanityOptions.push((firstThreeToWords[i] + lastFourToWords[j]).toUpperCase());
+        vanityOptions.push((`${countryAreaCode}-${firstThreeToWords[i]}-${lastFourToWords[j]}`).toUpperCase());
         if (vanityOptions.length >= 5) {
           return vanityOptions;
         }
@@ -101,7 +107,7 @@ function convertNumber(phoneNum) {
     }
     // If there are not yet five vanity options, add vanity options made of the first three digits of the phone number combined with four letter word options
     for (let k = 0; k < lastFourToWords.length; k++) {
-      vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[k]}`.toUpperCase());
+      vanityOptions.push(`${countryAreaCode}-${number[0]}${number[1]}${number[2]}-${lastFourToWords[k]}`.toUpperCase());
       if (vanityOptions.length >= 5) {
         return vanityOptions;
       }
@@ -113,5 +119,6 @@ function convertNumber(phoneNum) {
   }
 }
 
+console.log(convertNumber("+18587226925"))
 
 module.exports = convertNumber;
