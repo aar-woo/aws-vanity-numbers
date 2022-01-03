@@ -12,9 +12,11 @@ exports.handler = async function (event, context, callback) {
     PhoneNumber: phoneNum,
     TopThreeVanities: topThreeVanities
   }
-  await insertVanityNumbers(phoneNum, vanityNumbers).then(() => {
-    callback(null, response);
-  }).catch((err) => {
-    console.error(err);
-  });
+  await insertVanityNumbers(phoneNum, vanityNumbers)
+    .then(() => {
+      callback(null, response);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }
