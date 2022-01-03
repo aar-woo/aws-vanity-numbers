@@ -53,7 +53,6 @@ function convertNumber(phoneNum) {
   const fifthLetterOptions = keypad[number[4]];
   const sixthLetterOptions = keypad[number[5]];
   const seventhLetterOptions = keypad[number[6]];
-
   const firstThreeToWords = [];
   const lastFourToWords = [];
 
@@ -81,7 +80,7 @@ function convertNumber(phoneNum) {
     }
   }
 
-  // Create combinations of three letter and four letter words and add them to the vanity options
+  // Create combinations of three letter and four letter words and add them to vanity options
   // If there are no three letter word options, create vanity options from just four letter word options
   if (firstThreeToWords.length === 0) {
     for (let i = 0; i < lastFourToWords.length; i++) {
@@ -100,7 +99,7 @@ function convertNumber(phoneNum) {
         }
       }
     }
-    // If there are not yet five vanity options, add vanity options made of the first three digits and four letter word options
+    // If there are not yet five vanity options, add vanity options made of the first three digits of the phone number combined with four letter word options
     for (let k = 0; k < lastFourToWords.length; k++) {
       vanityOptions.push(`${number[0]}${number[1]}${number[2]}-${lastFourToWords[k]}`.toUpperCase());
       if (vanityOptions.length >= 5) {
