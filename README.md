@@ -1,5 +1,5 @@
 # aws-vanity-numbers
-An AWS project that converts a user's phone phone number into vanity numbers.
+An AWS project that converts a user's phone number into vanity numbers.
 
 Call testing:
   Amazon Connect Phone Number: +1 833-770-0599
