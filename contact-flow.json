@@ -1,0 +1,149 @@
+{
+  "modules": [
+    {
+      "id": "7a4e8a62-2c9d-4746-970d-68e8f62cdf13",
+      "type": "Disconnect",
+      "branches": [],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1264,
+          "y": 223
+        }
+      }
+    },
+    {
+      "id": "862eb105-8a26-4c49-81ef-7e0cac2d08a8",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "7a4e8a62-2c9d-4746-970d-68e8f62cdf13"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Goodbye",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 991,
+          "y": 193
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "c6742a37-215c-467c-a63e-2ef0894f4adb",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "862eb105-8a26-4c49-81ef-7e0cac2d08a8"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Based on the number you are calling from, your top three vanity numbers are $.External.TopThreeVanities",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 554,
+          "y": 5
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "161bdbec-d2d0-4065-8572-3c4d47836414",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "862eb105-8a26-4c49-81ef-7e0cac2d08a8"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Sorry your phone number could not be converted to vanity numbers.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 556,
+          "y": 220
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "fe144a3a-2a22-43ae-a802-afb7eb82b6d7",
+      "type": "InvokeExternalResource",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "c6742a37-215c-467c-a63e-2ef0894f4adb"
+        },
+        {
+          "condition": "Error",
+          "transition": "161bdbec-d2d0-4065-8572-3c4d47836414"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "FunctionArn",
+          "value": "arn:aws:lambda:us-west-2:214030852705:function:convert-number-to-vanity",
+          "namespace": null
+        },
+        {
+          "name": "TimeLimit",
+          "value": "8"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 276,
+          "y": 9
+        },
+        "dynamicMetadata": {},
+        "useDynamic": false
+      },
+      "target": "Lambda"
+    }
+  ],
+  "version": "1",
+  "start": "fe144a3a-2a22-43ae-a802-afb7eb82b6d7",
+  "metadata": {
+    "entryPointPosition": {
+      "x": 15,
+      "y": 20
+    },
+    "snapToGrid": false,
+    "name": "Phone Number to Vanities",
+    "description": null,
+    "type": "contactFlow",
+    "status": "published",
+    "hash": "5b447a0cf951f60ef494a5841327d5a33f6873cc864c65e78ccf46d818b13a6e"
+  },
+  "type": "contactFlow"
+}
